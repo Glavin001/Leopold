@@ -74,14 +74,14 @@ while True:
 					 PWD+"/Recording/thumbs/rec"+ str(64-i)+".gif")
 		n.show()
 		i += 8
-		time.sleep(.1)
+		time.sleep(.5)
 	i = 0
 	while os.path.exists("pycmd_wait"):
 		n.update(transText("Performing recognition"),
 				 "",
 				 PWD+"/Waiting/wait-"+str(i)+".png")
 		n.show()
-		time.sleep(.1)
+		time.sleep(.5)
 		i += 1;
 		if i > 17:
 			i = 0
