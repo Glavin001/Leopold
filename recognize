@@ -16,8 +16,12 @@
 
 USER_DIR=$HOME/.palaver.d
 
-
 cd $(dirname $0)
+
+while read line           
+do           
+    export "$line"           
+done <$USER_DIR/UserInfo
 
 # Try to run a command in ./Recognition/bin with useful errors.
 function run_command() {
@@ -56,6 +60,28 @@ fi
 
 rm Microphone/result 2>/dev/null
 
+echo "Before treatment : $speech" > last_speech.log
+
+# Make a first transformation to the file depending on the mode
+# The file must be at the root of the plugin directory with the name :
+# <mode>.pre
+# and if you want something specific for a language in addition :
+# <mode>-<language>.pre (it is executed after <mode>.pre)
+command="echo \"${speech}\""
+while read -r line
+do
+    if [ -e "$line" ]
+    then
+	command="$command | $line"
+    fi
+done < <(echo "./Plugins/${mode}.pre
+${USER_DIR}/Plugins/${mode}.pre
+./Plugins/${mode}-${LANGUAGE}.pre
+${USER_DIR}/${mode}-${LANGUAGE}.pre")
+
+speech=$(eval $command) 
+echo "After treatment : $speech" >> last_speech.log
+
 # We search in .palader.d/personal.dic
 if [ -e "$USER_DIR/personal.dic" ];then
     COMMAND=$(./Recognition/dictionary "$speech"\
@@ -87,7 +113,7 @@ if [ -d "$USER_DIR/Plugins" ];then
 	if [ "$EXIT" != 2 ];then
 	    echo "There is an error in $dictionary"
 	fi
-    done < <(echo "$(./Recognition/find_dic $mode ${USER_DIR}/Plugins)")
+    done < <(echo "$(./Recognition/find_dic \"$mode\" \"${USER_DIR}/Plugins\" \"$LANGUAGE\")")
 fi
 
 # We search in the <installation>/Plugins directory
