@@ -20,19 +20,21 @@ do
 ${i}"
 done
 
-echo "$paths" | while read -r line
+while read -r line
 do
-    cd "$line"
-    # I don't filter the folder /bin in order to keep the "short
-    # syntax" system (with all files in one folder) usable
-    result=$(find $(pwd) -type f | grep -e "/${name}$" | head -n 1)
-    if [ ! -z "$result" ]
+    if [ -d "$line" ]
     then
-	echo -n "$result"
-	cd "$current_path"
-	exit 0
+	cd "$line"
+        # I don't filter the folder /bin in order to keep the "short
+        # syntax" system (with all files in one folder) usable
+	result=$(find $(pwd) -type f | grep -e "/${name}$" | head -n 1)
+	if [ ! -z "$result" ]
+	then
+	    echo -n "$result"
+	    cd "$current_path"
+	    exit 0
+	fi
     fi
-
-done
+done < <(echo "$paths")
 
 cd "$current_path"

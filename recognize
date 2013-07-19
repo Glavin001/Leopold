@@ -16,22 +16,32 @@
 
 USER_DIR=$HOME/.palaver.d
 
+
+cd $(dirname $0)
+
 # Try to run a command in ./Recognition/bin with useful errors.
 function run_command() {
-	while read line           
-	do           
-		export "$line"           
-	done <$USER_DIR/UserInfo
-    eval "./Recognition/bin/$1"
-
-    if [ $? != 0 ];then
-	./Recognition/bin/result Error "There was an error while running:" \
-	"$1" ""
+    while read line           
+    do           
+	export "$line"           
+    done <$USER_DIR/UserInfo
+    echo "$1"
+    bin=$(./Recognition/find_bin "${1%% *}" "${USER_DIR}/Plugins/" "./Plugins/")
+    if [ ! -z "$bin" ]
+    then
+	eval "$bin ${1#* }"
+	
+	if [ $? != 0 ];then
+	    ./Recognition/bin/result Error "There was an error while running:" \
+		"$1" ""
+	    exit 1
+	fi
+    else
+	./Recognition/bin/result Error "File not found :" \
+	    "$1" ""
 	exit 1
     fi
 }
-
-cd $(dirname $0)
 
 read mode < MODE
 
@@ -46,7 +56,7 @@ fi
 
 rm Microphone/result 2>/dev/null
 
-
+# We search in .palader.d/personal.dic
 if [ -e "$USER_DIR/personal.dic" ];then
     COMMAND=$(./Recognition/dictionary "$speech"\
  "$USER_DIR/personal.dic")
@@ -62,20 +72,47 @@ if [ -e "$USER_DIR/personal.dic" ];then
 	echo "There is an error in $USER_DIR/personal.dic"
     fi
 fi
+# We search in the .palader.d/Plugins directory
+if [ -d "$USER_DIR/Plugins" ];then
+    while read -r dictionary
+    do
+	COMMAND=$(./Recognition/dictionary "$speech"\
+ "$dictionary")
 
+	EXIT=$?
+	if [ "$EXIT" == 0 ];then
+	    run_command "$COMMAND"
+	    exit 0
+	fi
+	if [ "$EXIT" != 2 ];then
+	    echo "There is an error in $dictionary"
+	fi
+    done < <(echo "$(./Recognition/find_dic $mode ${USER_DIR}/Plugins)")
+fi
 
-COMMAND=$(./Recognition/dictionary "$speech" "./Recognition/modes/${mode}.dic")
+# We search in the <installation>/Plugins directory
+if [ -d "Plugins" ];then
+    while read -r dictionary
+    do
+	COMMAND=$(./Recognition/dictionary "$speech"\
+ "$dictionary")
 
-EXIT=$?
+	EXIT=$?
+	if [ "$EXIT" == 0 ];then
+	    run_command "$COMMAND"
+	    exit 0
+	fi
+	if [ "$EXIT" != 2 ];then
+	    echo "There is an error in $dictionary"
+	fi
+    done < <(echo "$(./Recognition/find_dic $mode Plugins)")
+fi
 
-if [ "$EXIT" == 0 ];then
-    run_command "$COMMAND"
-    exit 0
-elif [ "$EXIT" == 2 ];then
+if [ "$EXIT" == 2 ];then
     ./Recognition/bin/result Error "'$speech'" "is not a recognized command" ""
 
 else 
-    echo "There is an error in ${mode}.dic"
-    ./Recognition/bin/result Error "There was an error while reading ${mode}.dic" \
+    echo "There is an error in ${dictionary}"
+    ./Recognition/bin/result Error "There was an error while reading $dictionary" \
 	"$COMMAND" ""
 fi
