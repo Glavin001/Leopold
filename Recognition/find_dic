@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Use : find_dic <mode> <path> [language]
+# This script will return all dic in mode <mode>, in <path> in [language] and with no language specified
+
+mode=$1
+path=$2
+lang=$3
+
+if [ -z "$path" ]
+then
+    echo "Use : find_dic <mode> <path> [language]"
+    exit 1
+fi
+
+
+current_path=$(pwd)
+cd "$path"
+list1=""
+if [ ! -z "$lang" ]
+then
+    # I don't filter the folder /modes in order to keep the "short
+    # syntax" system (with all files in one folder) usable.
+    list1=$(find $(pwd) -type f | grep -e "${mode}-${lang}\.dic$")
+    if [ ! -z "$list1" ]
+    then
+	list1="$list1 \n"
+    fi
+fi
+list2=$(find $(pwd) -type f | grep -e "${mode}\.dic$")
+echo -e "$list1$list2"
+
+cd "$current_path"

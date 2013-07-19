@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Use : find_bin <bin name> <path1> [path1] ...
+# This script will return the bin file, the priority is gave to path1, then path2 and so on...
+
+if [ -z "$2" ]
+then
+    echo "Use : find_bin <bin name> <path1> [path1] ..."
+    exit 1
+fi
+
+current_path=$(pwd)
+name=$1
+paths=$2
+shift
+shift
+for i in "$@"
+do
+    paths="${paths}
+${i}"
+done
+
+echo "$paths" | while read -r line
+do
+    cd "$line"
+    # I don't filter the folder /bin in order to keep the "short
+    # syntax" system (with all files in one folder) usable
+    result=$(find $(pwd) -type f | grep -e "/${name}$" | head -n 1)
+    if [ ! -z "$result" ]
+    then
+	echo -n "$result"
+	cd "$current_path"
+	exit 0
+    fi
+
+done
+
+cd "$current_path"

@@ -1,0 +1,45 @@
+#!/bin/bash
+# Use : create_plugin <name>
+# This script create a plugin with this structure :
+# Test
+#  plugin.info 
+#  bin
+#   links_to_existing_bins
+#  config
+#   links_to_existing_configs
+#  modes
+#   main.dic // empty except for comments on what to do maybe
+#   main-en.dic
+
+name=$1
+if [ -z $name ]
+then
+    echo "You must specify a plugin name :"
+    echo "  create_plugin <name>"
+    exit 1
+fi
+USER_DIR=$HOME/.palaver.d
+
+# Try to run a command in ./Recognition/bin with useful errors.
+while read line           
+do           
+    export "$line"           
+done <$USER_DIR/UserInfo
+
+mkdir "$name"
+cd "$name"
+echo "Name = $name
+Authors = $FIRST $LAST
+Version = 1.0
+Bin = // For the moment I don't see how to do this
+Depends =
+provides =
+description = The plugin $name
+actions =
+" > plugin.info
+mkdir bin
+mkdir config # I didn't run what was here
+mkdir modes
+touch modes/main.dic
+touch modes/main-en.dic
+
