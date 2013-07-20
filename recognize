@@ -67,6 +67,7 @@ echo "Before treatment : $speech" > last_speech.log
 # <mode>.pre
 # and if you want something specific for a language in addition :
 # <mode>-<language>.pre (it is executed after <mode>.pre)
+
 command="echo \"${speech}\""
 while read -r line
 do
