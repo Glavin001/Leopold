@@ -4,6 +4,7 @@ message="Options :
 -c <name> : Create package name
 -p <name> : Package name
 -u <name> : Update the plugin.info file
+-i
 -d        : If present, in current directory, if not in .palaver.d/Plugins
 -n        : Non interactive mode (don't run editor with plugin.info)
 -f        : Remove the package without asking if package already exists"
@@ -15,32 +16,14 @@ ask=true
 while getopts ":dc:p:u:" opts
 do
     case $opts in
-	d)
-	    dir=$(pwd)
-	    ;;
-	c)
-	    create_name=$OPTARG
-	    ;;
-	p)
-	    package_name=$OPTARG
-	    ;;
-	u)
-	    update_name=$OPTARG
-	    ;;
-	n)
-	    interactive=false
-	    ;;
-	f)
-	    ask=false
-	    ;;
-	\?)
-	    echo "$message"
-	    exit 1
-	    ;;
-	:)
-	    echo "$message"
-	    exit 1
-	    ;;
+	d) dir=$(pwd) ;;
+	c) create_name=$OPTARG ;;
+	p) package_name=$OPTARG ;;
+	u) update_name=$OPTARG ;;
+	n) interactive=false ;;
+	f) ask=false ;;
+	\?) echo "$message" exit 1 ;;
+	:) echo "$message" exit 1 ;;
     esac
 done
 
@@ -65,9 +48,9 @@ then
     echo "$message"
 fi
 
-create_name=$(echo "$create_name" | grep -e "^[a-zA-Z0-9_]\+$")
-package_name=$(echo "$package_name" | grep -e "^[a-zA-Z0-9_]\+$")
-update_name=$(echo "$update_name" | grep -e "^[a-zA-Z0-9_]\+$")
+create_name=$(echo "$create_name" | grep -e "^[a-zA-Z0-9_ ]\+$")
+package_name=$(echo "$package_name" | grep -e "^[a-zA-Z0-9_ ]\+$")
+update_name=$(echo "$update_name" | grep -e "^[a-zA-Z0-9_ ]\+$")
 if [ -z "$create_name" ] && [ -z "$package_name" ] && [ -z "$update_name" ]
 then
     echo "Please use only letters, numbers and underscores in your package name."
