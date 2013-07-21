@@ -29,10 +29,12 @@ function run_command() {
     do           
 	export "$line"           
     done <$USER_DIR/UserInfo
-    echo "$1"
+    echo "Command : $1"
     bin=$(./Recognition/find_bin "${1%% *}" "${USER_DIR}/Plugins/" "./Plugins/")
+    echo "$(pwd)"
     if [ ! -z "$bin" ]
     then
+	echo "bin: $bin"
 	eval "$bin ${1#* }"
 	
 	if [ $? != 0 ];then
@@ -101,38 +103,56 @@ if [ -e "$USER_DIR/personal.dic" ];then
 fi
 # We search in the .palader.d/Plugins directory
 if [ -d "$USER_DIR/Plugins" ];then
+    # With old versions, replace main with actions
+    add=""
+    if [ "$mode" == "main" ]
+    then
+	add="\n$(./Recognition/find_dic actions ${USER_DIR}/Plugins $LANGUAGE)"
+    fi
+    # We read dictionnaries :
     while read -r dictionary
     do
-	COMMAND=$(./Recognition/dictionary "$speech"\
+	if [ ! -z "$dictionary" ]
+	then
+	    COMMAND=$(./Recognition/dictionary "$speech"\
  "$dictionary")
-
-	EXIT=$?
-	if [ "$EXIT" == 0 ];then
-	    run_command "$COMMAND"
-	    exit 0
+	    
+	    EXIT=$?
+	    if [ "$EXIT" == 0 ];then
+		run_command "$COMMAND"
+		exit 0
+	    fi
+	    if [ "$EXIT" != 2 ];then
+		echo "There is an error in $dictionary"
+	    fi
 	fi
-	if [ "$EXIT" != 2 ];then
-	    echo "There is an error in $dictionary"
-	fi
-    done < <(echo "$(./Recognition/find_dic \"$mode\" \"${USER_DIR}/Plugins\" \"$LANGUAGE\")")
+    done < <(echo -e "$(./Recognition/find_dic $mode ${USER_DIR}/Plugins $LANGUAGE)$add")
 fi
 
 # We search in the <installation>/Plugins directory
 if [ -d "Plugins" ];then
+    add=""
+    if [ "$mode" == "main" ]
+    then
+	add="\n$(./Recognition/find_dic actions Plugins $LANGUAGE)"
+    fi
     while read -r dictionary
     do
-	COMMAND=$(./Recognition/dictionary "$speech"\
+	if [ ! -z "$dictionary" ]
+	then
+	    COMMAND=$(./Recognition/dictionary "$speech"\
  "$dictionary")
-
-	EXIT=$?
-	if [ "$EXIT" == 0 ];then
-	    run_command "$COMMAND"
-	    exit 0
+	    
+	    EXIT=$?
+	    if [ "$EXIT" == 0 ];then
+		run_command "$COMMAND"
+		exit 0
+	    fi
+	    if [ "$EXIT" != 2 ];then
+		echo "There is an error in $dictionary"
+	    fi
 	fi
-	if [ "$EXIT" != 2 ];then
-	    echo "There is an error in $dictionary"
-	fi
-    done < <(echo "$(./Recognition/find_dic $mode Plugins)")
+    done < <(echo -e "$(./Recognition/find_dic $mode Plugins $LANGUAGE)$add")
 fi
 
 if [ "$EXIT" == 2 ];then

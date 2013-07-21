@@ -8,11 +8,14 @@ message="Options :
 -l        : List all plugins installed
 -L        : List all plugins in repo
 -f        : Force installation with no confirmation.
+-a        : Install plugins in the palaver directory
 "
 
 current_dir=$(pwd)
-install_dir="$(dirname $(readlink -f $0))"
+# Plugin directory :
 dir="$HOME/.palaver.d/Plugins/"
+
+install_dir="$(dirname $(readlink -f $0))"
 install_name=""
 remove_name=""
 repo_name=""
@@ -20,7 +23,7 @@ info_name=""
 list=false
 list_repo=false
 stop=true
-while getopts ":i:r:p:d:lLf" opts
+while getopts ":i:r:p:d:lLfa" opts
 do
     case $opts in
 	i) install_name=$OPTARG; stop=false ;;
@@ -29,6 +32,7 @@ do
 	d) info_name=$OPTARG; stop=false ;;
 	l) list=true; stop=false ;;
 	L) list_repo=true; stop=false ;;
+	a) dir="$install_dir" ;;
 	\?) echo "$message"; exit 1 ;;
 	:) echo "$message"; exit 1 ;;
     esac
@@ -70,7 +74,7 @@ if [ ! -z "$install_name" ]
 then
     if [ -e "$install_name" ]
     then
-	echo "$install_name"
+	echo "Installing $install_name..."
 	# Name of the plugin
 	folder=$(tar -tvf "$install_name"  | grep -e "^d" | grep -o -e " [^/ ]*/$" | head -n 1 | sed 's/ *//g')
 	add=""
@@ -86,7 +90,6 @@ then
 	then
 	    mkdir "${dir}${add}"
 	fi	    
-	echo "	tar -C \"${dir}${add}\" -xvf \"$install_name\""
 	tar -C "${dir}${add}" -xvf "$install_name"
 	echo "Plugin installed in ${dir}${add}${folder}"
     else
@@ -126,3 +129,4 @@ then
     fi
 fi
 
+cd "$current_dir"

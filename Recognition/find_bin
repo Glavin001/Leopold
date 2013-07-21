@@ -34,6 +34,7 @@ do
 	    cd "$current_path"
 	    exit 0
 	fi
+	cd "$current_path"
     fi
 done < <(echo "$paths")
 
