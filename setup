@@ -29,6 +29,7 @@ rm $HOME/.palaver.d/plugins.db
 rm $HOME/.palaver.d/UserInfo
 rm $HOME/.palaver.d/configs -r
 mkdir $HOME/.palaver.d/
+mkdir $HOME/.palaver.d/Plugins/
 cp Recognition/config/defaultBin Recognition/bin -r
 touch $HOME/.palaver.d/UserInfo
 cp Recognition/config/BlankInfo $HOME/.palaver.d/UserInfo
