@@ -7,6 +7,7 @@ message="Options :
 -d <name> : Display info on a plugin
 -l        : List all plugins installed
 -L        : List all plugins in repo
+-f        : Force installation with no confirmation.
 "
 
 current_dir=$(pwd)
