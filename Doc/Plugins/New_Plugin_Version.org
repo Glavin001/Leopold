@@ -1,0 +1,82 @@
+* Create a plugin
+
+** Generate the structure
+To create a plugin you can still use the old structure (see How to create a plugin to know how to use it), or use the new one. With the new one, you can automatiquely update your plugin.info file, use several languages plugins, create your own modes... You can put all files in the root of the plugin directory but to update the plugin you must use the following structure, and it's really more readable to use it, so it's recommanded to use it :
+
+- Plugin_name/
+--- plugin.info <=== contain all informations about the file
+--- bin/ <=== contain all new scripts
+--- config/ <=== contain configuration files, I don't know what's the use so I didn't add this function yet
+--- modes/ <=== contain all modes. For classic mode, please use main.dic instead of actions.dic which is depreciated. You can specify a language plugin with main-fr.dic (Cf. Languages)
+- mode.pre <=== Facultatif file Cf. apply script to the speech
+
+To create automatiquely this structure you can do :
+./plugins_sdk -c Plugin_name
+
+The plugin will be created in ~/.palader.d/Plugins by default. (see ./plugins_sdk for all options)
+
+
+** Dictionnaries, modes, and languages
+All dictionaries files are in Plugin_name/modes directory. The filename of a dictionnary is <mode>-<language>.dic, with <mode> the name of the mode (by default main) and <language> the name of the language (en, es, fr...). If you want to add your functions in all languages, you can put it in <mode>.dic
+
+The structure of the dictionnary is always the same :
+------------
+what to say
+  what to do
+------------
+But you can now document your plugin :
+
+
+** Document your plugin
+To be able to auto-generate the field "actions" in plugin.info, you can put in your dictionary files comments on actions with '#@:' in the beginning of a line :
+------------
+#@:what to say : execute an action
+what <to,you can> say
+  what to do
+------------
+The sentence "what to say" will be the one displayed to the user in the plugin documentation.
+
+You can put too in you bin files (in bin/) the following comment to specify the dependancies of your script :
+------------
+#@depends: <name depend 1> <name depend 2>
+------------
+
+
+** Update your plugin
+If you use the new structure you can use auto-generate the plugin.info file with
+./plugins_sdk -u <Plugin name>
+
+It will automatiquely generate the bin dependencies (local, and system if you use comments), the documentation in action (Cf. Document your plugin)
+
+The new plugin.info is displayed at the end.
+
+
+** Package your plugin
+To share your plugin you must package it. You can do it with
+./plugins_sdk -p <Plugin name>
+(with no options the plugin must be in ~/.palader.d/Plugins)
+
+The package is generated in ~/.palader.d/Plugins.
+
+
+* Manage your plugins
+You can use plugins_manager to manage your plugin (Cf. documentation with ./plugins_manager).
+
+** List plugins
+You can list plugins installed with 
+./plugins_manager -l
+and plugins available in repository with
+./plugins_manager -L
+
+** Install plugins
+To install a new plugin from a file :
+./plugins_manager -i <filename>
+And from the repository
+./plugins_manager -p <Plugin name>
+
+** Remove plugins
+Just run 
+./plugins_manager -r <Plugin name>
+
+** More options
+For more options (changing directory...) just run ./plugins_manager with no options.

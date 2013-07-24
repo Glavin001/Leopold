@@ -29,12 +29,9 @@ function run_command() {
     do           
 	export "$line"           
     done <$USER_DIR/UserInfo
-    echo "Command : $1"
     bin=$(./Recognition/find_bin "${1%% *}" "${USER_DIR}/Plugins/" "./Plugins/")
-    echo "$(pwd)"
     if [ ! -z "$bin" ]
     then
-	echo "bin: $bin"
 	eval "$bin ${1#* }"
 	
 	if [ $? != 0 ];then

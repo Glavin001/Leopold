@@ -32,7 +32,7 @@ do
 	d) info_name=$OPTARG; stop=false ;;
 	l) list=true; stop=false ;;
 	L) list_repo=true; stop=false ;;
-	a) dir="$install_dir" ;;
+	a) dir="${install_dir}/Plugins/" ;;
 	\?) echo "$message"; exit 1 ;;
 	:) echo "$message"; exit 1 ;;
     esac
@@ -49,7 +49,7 @@ info_name=$(echo "$info_name" | grep -e "^[a-zA-Z0-9_ ]\+$")
 # Remove plugin
 if [ ! -z "$remove_name" ]
 then
-    if [ -d "${dir}${remove_name}"]
+    if [ -d "${dir}${remove_name}" ]
     then
 	rm -r "${dir}${remove_name}"
 	echo "The plugin $remove_name has been removed"
