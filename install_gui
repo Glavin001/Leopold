@@ -50,7 +50,7 @@ elif response == gtk.RESPONSE_CANCEL:
 	sys.exit(0)
 dialog.destroy()
 
-call(["./plugins_install", "-i", filename, "-f"])
+call(["./plugins_manager", "-i", filename, "-f"])
 
 data = open("InstallResult")
 message = data.read()

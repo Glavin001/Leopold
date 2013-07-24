@@ -31,7 +31,7 @@ class EntryExample:
 		self.vbox.show()
 		self.window.show()
 		for e in self.plugins:
-			os.system("./plugins_install -p "+e+" -f")
+			os.system("./plugins_manager -p "+e+" -f")
 		gtk.main_quit()
 	def __init__(self):
 		self.plugins = []
