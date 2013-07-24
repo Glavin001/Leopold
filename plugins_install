@@ -91,9 +91,11 @@ then
 	    mkdir "${dir}${add}"
 	fi	    
 	tar -C "${dir}${add}" -xvf "$install_name"
-	echo "Plugin installed in ${dir}${add}${folder}"
+	echo "Plugin successfully installed in ${dir}${add}${folder}"
+	echo "Plugin successfully installed in ${dir}${add}${folder}" > InstallResult
     else
 	echo "Fichier $install_name not found"
+	echo "Fichier $install_name not found" > InstallResult
     fi
 fi  
 
@@ -102,7 +104,7 @@ fi
 if "$list"
 then
     echo "--- Plugins in ${install_dir}/Plugins/"
-    ls -d ${install_dir}*/ -1 | grep -o -e "/[^/]*/$" | sed 's,/,,g'
+    ls -d ${install_dir}/Plugins/*/ -1 | grep -o -e "/[^/]*/$" | sed 's,/,,g'
     echo -e "\n--- Plugins in $dir"
     ls -d ${dir}*/ -1 | grep -o -e "/[^/]*/$" | sed 's,/,,g'
 fi
@@ -121,9 +123,9 @@ then
     if [ -e "${dir}/${info_name}/plugin.info" ]
     then
 	cat "${dir}/${info_name}/plugin.info"
-    elif [ -e "${install_dir}/${info_name}/plugin.info" ]
+    elif [ -e "${install_dir}/Plugins/${info_name}/plugin.info" ]
     then
-	cat "${install_dir}/${info_name}/plugin.info"
+	cat "${install_dir}/Plugins/${info_name}/plugin.info"
     else
 	echo "Plugin $info_name not found."
     fi

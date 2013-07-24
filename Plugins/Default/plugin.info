@@ -1,0 +1,55 @@
+name = Default
+authors = Tobias Bora
+version = 1.0
+languages = en es fr
+configs = settings.conf
+bin =  edit_details goto mode open result_from_call say type
+depends = 
+provides = 
+description = The plugin Default
+action=
+
+# For all languages :
+
+# Language : en
+exit dication mode
+say <text> : Pronounce the text
+write <text> the text
+copy
+paste
+dictation mode : go in dictation mode
+Open repository : open the palaver website
+status : gives the git status
+go to <website> : open your browser with website.
+open Google Chrome
+Change my info
+
+# Language : es
+Modo dictado sale
+Decir <texto>
+escrito <texto>
+copiar
+pegar
+modo dictato
+repositorio abierto
+da el git status
+abre la página <website>
+abre Google Chrome
+abre Firefox
+abre el programa <programa>
+Cambiar perfil
+
+# Language : fr
+Quitte le mode dictée
+Dis <texte>
+écrit <texte>
+copie
+colle
+active le mode de dictée
+Ouvre le site du projet
+Status : donne le status git
+ouvre la page <site>
+Lance Google Chrome
+Lance Firefox
+Ouvre le logiciel <nom>
+Change mon profil

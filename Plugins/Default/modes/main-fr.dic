@@ -1,0 +1,42 @@
+#@:Dis <texte>
+<di<s,t>,prononce[s]> (LINE words)
+  say "$words$"
+#@:écrit <texte>
+<tape,écri[s,t]> (LINE words)
+  type "$words$\\r"
+#@:copie
+copie[ moi][ ça, ceci, ce texte, cette image]
+  type '\\Cc'
+#@:colle
+colle[ moi][ ça, ceci, ce texte, cette image]
+  type '\\Cv'
+
+#@:active le mode de dictée
+[active][ le][ ]mode[ de] dictée
+  mode dictation
+
+#@:Ouvre le site du projet
+ouvre[ le] site[ du] projet
+	goto "http://palaver.bmandesigns.com"
+
+#@:Status : donne le status git
+statu<s,e>
+    result_from_call "git status"
+
+#@:ouvre la page <site>
+<ouvre,va< a, à>> la page (LINE site)
+  goto "$site$"
+
+#@:Lance Google Chrome
+<lance,ouvre>[ moi] <g,G>oogle <c,C>hrome
+  open 'google-chrome'
+#@:Lance Firefox
+<lance,ouvre>[ moi] <F,f>irefox
+  open 'firefox'
+#@:Ouvre le logiciel <nom>
+<lance,ouvre>[ moi] le logiciel (WORD prog)
+  open $prog$
+  
+#@:Change mon profil
+<edit[e][r],change[r],modifie[r]> mon profil
+  edit_details

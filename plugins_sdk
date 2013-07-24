@@ -4,7 +4,6 @@ message="Options :
 -c <name> : Create package name
 -p <name> : Package name
 -u <name> : Update the plugin.info file
--i
 -d        : If present, in current directory, if not in .palaver.d/Plugins
 -n        : Non interactive mode (don't run editor with plugin.info)
 -f        : Remove the package without asking if package already exists"
@@ -13,7 +12,7 @@ current_dir=$(pwd)
 dir="$HOME/.palaver.d/Plugins/"
 interactive=true
 ask=true
-while getopts ":dc:p:u:" opts
+while getopts ":dc:p:u:nf" opts
 do
     case $opts in
 	d) dir=$(pwd) ;;
@@ -138,7 +137,7 @@ If you want to run the script in the current directory please use the option -d"
 	
 	# Config
 	echo -n "Config..."
-	config_files=$(find config/ -type f | grep -e "config/\(.*\.conf\)$" | sed 's|config/\(.*\.conf\)$|\1|' | tr '\n' ' ' | sed 's/ $//')
+	config_files=$(find config/ -type f | grep -e "config/\(.*\.conf\)$" | sed 's|config/\(.*\.conf\)$|\1|' | sort | uniq | tr '\n' ' ' | sed 's/ $//')
 	sed -i -e "s|^configs.*$|configs = ${config_files}|g" plugin.info
 	echo "Done"
 	
@@ -147,10 +146,11 @@ If you want to run the script in the current directory please use the option -d"
 	bin_files=""
 	while read -r file
 	do
-	    bin=$(cat "$file" | grep -e "^ " | sed 's/^ *//g' | cut -d' ' -f1 | sort | uniq | tr '\n' ' ' | sed 's/ $//')
-	    bin_files=$(echo "${bin} ${bin_files}" | sed 's/^ *//')
+	    bin=$(cat "$file" | grep -e "^ " | sed 's/^ *//g' | cut -d' ' -f1)
+	    bin_files=$(echo -e "${bin}\n${bin_files}")
 	done < <(find modes/ -type f)
-	sed -i -e "s/^bin.*$/bin = $bin_files/g" plugin.info
+	bin_files=$(echo "$bin_files" | sort | uniq | tr '\n' ' ' | sed 's/ $//')
+	sed -i -e "s/^bin.*$/bin = ${bin_files}/g" plugin.info
 	echo "Done"
 	
 	# depends (like espeak)
@@ -158,9 +158,10 @@ If you want to run the script in the current directory please use the option -d"
 	depends_files=""
 	while read -r file
 	do
-	    tmp=$(cat "$file" | grep -e "^#@depends:* " | sed 's/^#@depends:* *//g'| sort | uniq | tr '\n' ' ' | sed 's/ *$//')
-	    depends_files=$(echo "${tmp} ${depends_files}" | sed 's/^ *//')
+	    tmp=$(cat "$file" | grep -e "^#@depends:* " | sed 's/^#@depends:* *//g')
+	    depends_files=$(echo -e "${tmp}\n${depends_files}")
 	done < <(find bin/ -type f)
+	depends_files=$(echo "$depends_files" | sort | uniq | tr '\n' ' ' | sed 's/ *$//')
 	sed -i -e "s/^depends.*$/depends = $depends_files/g" plugin.info
 	echo "Done"
 	
@@ -197,6 +198,11 @@ $tmp"
 	sed -i '/^action/,$d' plugin.info
 	echo "$action" >> plugin.info
 	echo -e "Done\n"
+	echo "$interactive"
+	if $interactive
+	then
+	    editor plugin.info
+	fi
 	echo "********* plugin.info *********"
 	cat "plugin.info"
 	echo -e "*******************************\n"
