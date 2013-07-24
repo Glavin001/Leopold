@@ -20,26 +20,26 @@ The plugin will be created in ~/.palader.d/Plugins by default. (see ./plugins_sd
 All dictionaries files are in Plugin_name/modes directory. The filename of a dictionnary is <mode>-<language>.dic, with <mode> the name of the mode (by default main) and <language> the name of the language (en, es, fr...). If you want to add your functions in all languages, you can put it in <mode>.dic
 
 The structure of the dictionnary is always the same :
-------------
+##########
 what to say
   what to do
-------------
+##########
 But you can now document your plugin :
 
 
 ** Document your plugin
 To be able to auto-generate the field "actions" in plugin.info, you can put in your dictionary files comments on actions with '#@:' in the beginning of a line :
-------------
+##########
 #@:what to say : execute an action
 what <to,you can> say
   what to do
-------------
+##########
 The sentence "what to say" will be the one displayed to the user in the plugin documentation.
 
 You can put too in you bin files (in bin/) the following comment to specify the dependancies of your script :
-------------
+
 #@depends: <name depend 1> <name depend 2>
-------------
+
 
 
 ** Update your plugin
