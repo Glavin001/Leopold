@@ -16,7 +16,8 @@
 
 USER_DIR=$HOME/.palaver.d
 
-cd $(dirname $0)
+# Go to the install directory (follow the symlink)
+cd "$(dirname $(readlink -f $0))"
 
 while read line           
 do           

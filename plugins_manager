@@ -15,7 +15,7 @@ current_dir=$(pwd)
 # Plugin directory :
 dir="$HOME/.palaver.d/Plugins/"
 
-install_dir="$(dirname $(readlink -f $0))"
+palaver_dir="$(dirname $(readlink -f $0))"
 install_name=""
 remove_name=""
 repo_name=""
@@ -32,7 +32,7 @@ do
 	d) info_name=$OPTARG; stop=false ;;
 	l) list=true; stop=false ;;
 	L) list_repo=true; stop=false ;;
-	a) dir="${install_dir}/Plugins/" ;;
+	a) dir="${palaver_dir}/Plugins/" ;;
 	\?) echo "$message"; exit 1 ;;
 	:) echo "$message"; exit 1 ;;
     esac
@@ -103,8 +103,8 @@ fi
 # List installed
 if "$list"
 then
-    echo "--- Plugins in ${install_dir}/Plugins/"
-    ls -d ${install_dir}/Plugins/*/ -1 | grep -o -e "/[^/]*/$" | sed 's,/,,g'
+    echo "--- Plugins in ${palaver_dir}/Plugins/"
+    ls -d ${palaver_dir}/Plugins/*/ -1 | grep -o -e "/[^/]*/$" | sed 's,/,,g'
     echo -e "\n--- Plugins in $dir"
     ls -d ${dir}*/ -1 | grep -o -e "/[^/]*/$" | sed 's,/,,g'
 fi
@@ -123,9 +123,9 @@ then
     if [ -e "${dir}/${info_name}/plugin.info" ]
     then
 	cat "${dir}/${info_name}/plugin.info"
-    elif [ -e "${install_dir}/Plugins/${info_name}/plugin.info" ]
+    elif [ -e "${palaver_dir}/Plugins/${info_name}/plugin.info" ]
     then
-	cat "${install_dir}/Plugins/${info_name}/plugin.info"
+	cat "${palaver_dir}/Plugins/${info_name}/plugin.info"
     else
 	echo "Plugin $info_name not found."
     fi
