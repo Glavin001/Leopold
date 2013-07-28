@@ -9,7 +9,10 @@ currentDir = os.path.dirname(os.path.realpath(__file__))
 
 while True:
     if os.path.isfile(currentDir + '/Microphone/pycmd_nocmd'):
-        os.system("rec -r 16000 -b 16 speech.flac silence 1 0.1 0.1% 1 1.0 0.1%")
+        # The -l option doesn't cut the sound
+        # 0.1% is really to low, when I just touch the keyboard it
+        # recognizes it as a sound.
+        os.system("rec -r 16000 -b 16 speech.flac silence -l 1 0.1 8% 1 2.0 6%")
         with open('speech.flac', 'r') as audio_file:
             content = audio_file.read()
         audio_file.closed
