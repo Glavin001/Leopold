@@ -1,11 +1,11 @@
 name = Default
 authors = Tobias Bora
 version = 1.0
-languages = en es fr
+languages = en es fr pt
 configs = settings.conf
 bin =  edit_details goto mode open result_from_call say type
 depends = 
-provides = 
+provides = mode type result_from_call say edit_details ask open goto result
 description = The plugin Default
 action=
 
@@ -53,3 +53,18 @@ Lance Google Chrome
 Lance Firefox
 Ouvre le logiciel <nom>
 Change mon profil
+
+# Language : pt
+sair do modo ditado
+fale <text> : Pronuncia o texto
+escreve <text> : escreve <text> o texto
+copiar
+colar
+iniciar modo ditado
+Abrir repositório : Abrir o site do Palaver
+status : gives the git status
+vai para o site <website> : Abre o navegador com o site.
+qual a previsão do tempo para hoje : Previsão do tempo
+abrir o Google Chrome
+abrir Firefox
+Mudar minhas informações : Mudar meus dados
