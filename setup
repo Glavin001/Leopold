@@ -74,7 +74,7 @@ else
 fi
 
 # Install Python Arg-parse
-pythonPackages="argparse"
+pythonPackages="argparse watchdog" #pyinotify
 if ! which "pip" > /dev/null; 
 then
    	echo "Python Package Manager 'pip' not found!"

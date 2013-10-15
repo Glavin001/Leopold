@@ -26,6 +26,7 @@ google_say() {
     #echo $sayUrl;
     wget -q -U "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36" -O "./tmp/say.mp3" "$sayUrl" >> /dev/null 2>&1
     play ./tmp/say.mp3 >> /dev/null 2>&1
+    rm ./tmp/say.mp3 >> /dev/null 2>&1
     # mplayer -ao alsa -really-quiet -noconsolecontrols $sayUrl;
 }
 google_say $*
