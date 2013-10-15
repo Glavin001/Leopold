@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os, sys, pygtk,time,subprocess,urllib2
+import os, sys, pygtk, time, subprocess, urllib2
 root = ''.join([e+'/' for e in os.path.realpath(__file__).split('/')[0:-1]])
 home = subprocess.Popen("echo $HOME", shell=True, stdout=subprocess.PIPE).communicate()[0].replace('\n','')
 pygtk.require('2.0')

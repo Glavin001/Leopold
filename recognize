@@ -46,7 +46,6 @@ fi
 
 rm Microphone/result 2>/dev/null
 
-
 if [ -e "$USER_DIR/personal.dic" ];then
     COMMAND=$(./Recognition/dictionary "$speech"\
  "$USER_DIR/personal.dic")
@@ -62,7 +61,6 @@ if [ -e "$USER_DIR/personal.dic" ];then
 	echo "There is an error in $USER_DIR/personal.dic"
     fi
 fi
-
 
 COMMAND=$(./Recognition/dictionary "$speech" "./Recognition/modes/${mode}.dic")
 
