@@ -26,7 +26,7 @@ if [ -e "speech.pid" ];then
     while kill -s 0 $PID_OF_SPEECH 2>/dev/null;do
     :
     done
-    RESULT="$(./send_speech speech.flac)"
+    RESULT="$(./send_speech.py speech.flac)"
     echo "$RESULT" > last_command.log
     ./recognize "$RESULT"
 

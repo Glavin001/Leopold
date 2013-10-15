@@ -1,0 +1,42 @@
+#@:Decir <texto>
+decir (LINE words)
+  say "$words$"
+#@:escrito <texto>
+escrito (LINE words)
+  type "$words$\\r"
+#@:copiar
+copiar
+  type '\\Cc'
+#@:pegar
+pegar
+  type '\\Cv'
+
+#@:modo dictato
+modo dictato
+  mode dictation
+
+#@:repositorio abierto
+repositorio abierto
+	goto "http://palaver.bmandesigns.com"
+
+#@:da el git status
+status
+    result_from_call "git status"
+
+#@:abre la página <website>
+abre la p<a,á>gina (LINE site)
+  goto "$site$"
+
+#@:abre Google Chrome
+abrir <g,G>oogle <c,C>hrome
+  open 'google-chrome'
+#@:abre Firefox
+abrir <f,F>irefox
+  open 'firefox'
+#@:abre el programa <programa>
+abre el programa (WORD prog)
+  open $prog$
+
+#@:Cambiar perfil
+cambiar perfil
+  edit_details

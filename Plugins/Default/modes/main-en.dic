@@ -1,0 +1,37 @@
+#@:say <text> : Pronounce the text
+<say,speak> (LINE words)
+  say "$words$"
+#@:write <text> the text
+<type,write> (LINE words)
+  type "$words$\\r"
+#@:copy
+copy[ this]
+  type '\\Cc'
+#@:paste
+paste[ this]
+  type '\\Cv'
+
+#@:dictation mode : go in dictation mode
+dictation mode
+  mode dictation
+
+#@:Open repository : open the palaver website
+<o,O>pen <r,R>epository
+	goto "http://palaver.bmandesigns.com"
+
+#@:status : gives the git status
+<s,S>tatus
+    result_from_call "git status"
+
+#@:go to <website> : open your browser with website.
+<g,G>o[ ]to (LINE site)
+  goto "$site$"
+
+#@:open Google Chrome
+open <g,G>oogle <c,C>hrome
+  open 'google-chrome'
+open does not exit
+  open 'bob'
+#@:Change my info
+<<e,E>dit,<c,C>hange> <m,M>y <i,I>nfo
+  edit_details

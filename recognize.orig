@@ -60,6 +60,8 @@ fi
 
 rm Microphone/result 2>/dev/null
 
+<<<<<<< HEAD
+=======
 echo "Before treatment : $speech" > last_speech.log
 
 # Make a first transformation to the file depending on the mode
@@ -84,6 +86,7 @@ speech=$(eval $command)
 echo "After treatment : $speech" >> last_speech.log
 
 # We search in .palader.d/personal.dic
+>>>>>>> tobiasBora/master
 if [ -e "$USER_DIR/personal.dic" ];then
     COMMAND=$(./Recognition/dictionary "$speech"\
  "$USER_DIR/personal.dic")
@@ -127,6 +130,16 @@ if [ -d "$USER_DIR/Plugins" ];then
     done < <(echo -e "$(./Recognition/find_dic $mode ${USER_DIR}/Plugins $LANGUAGE)$add")
 fi
 
+<<<<<<< HEAD
+COMMAND=$(./Recognition/dictionary "$speech" "./Recognition/modes/${mode}.dic")
+
+EXIT=$?
+
+if [ "$EXIT" == 0 ];then
+    run_command "$COMMAND"
+    exit 0
+elif [ "$EXIT" == 2 ];then
+=======
 # We search in the <installation>/Plugins directory
 if [ -d "Plugins" ];then
     add=""
@@ -154,6 +167,7 @@ if [ -d "Plugins" ];then
 fi
 
 if [ "$EXIT" == 2 ];then
+>>>>>>> tobiasBora/master
     ./Recognition/bin/result Error "'$speech'" "is not a recognized command" ""
 
 else 

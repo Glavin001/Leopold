@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if which "gedit"
+then
+    gedit "$HOME/.palaver.d/UserInfo"
+elif which "kate"
+then
+    kate "$HOME/.palaver.d/UserInfo"
+elif which "emacs"
+then
+    emacs "$HOME/.palaver.d/UserInfo"
+else
+    nano "$HOME/.palaver.d/UserInfo"
+fi

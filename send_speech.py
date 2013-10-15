@@ -32,4 +32,13 @@ class Stt:
             return jsdata['hypotheses'][0]['utterance']
         except Exception:
             return ''
-	    
+
+if len(sys.argv) == 2:
+    if os.path.isfile(sys.argv[1]):
+        with open(sys.argv[1], 'r') as audio_file:
+            content = audio_file.read()
+        audio_file.closed
+
+        stt = Stt()
+        text = stt.speech_to_text(content)
+        print text.encode('utf-8')

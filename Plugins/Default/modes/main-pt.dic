@@ -1,0 +1,42 @@
+#@:fale <text> : Pronuncia o texto
+<fale,falar,fala,diga,repita,diz,repete> (LINE words)
+  say "$words$"
+#@:escreve <text> : escreve <text> o texto
+<digite,digita,escreve,escreva> (LINE words)
+  type "$words$\\r"
+#@:copiar
+<copiar,copie>
+  type '\\Cc'
+#@:colar
+<colar,cole>
+  type '\\Cv'
+
+#@:iniciar modo ditado
+iniciar modo ditado
+  mode dictation
+
+#@:Abrir repositório : Abrir o site do Palaver
+abrir repositório
+	goto "http://palaver.bmandesigns.com"
+
+#@:status : gives the git status
+<<s,S>tatus,situação>
+    result_from_call "git status"
+
+#@:vai para o site <website> : Abre o navegador com o site.
+<ir,vá,vai,entre,acesse,visite,abre,abra,abrir> <para o,no,o> <saite,sítio,site> (LINE site)
+  goto "$site$"
+
+#@:qual a previsão do tempo para hoje : Previsão do tempo
+qual a previsão do tempo <pra,para> hoje
+	goto "www.climatempo.com.br/previsao-do-tempo/cidade/107/belohorizonte-mg"
+
+#@:abrir o Google Chrome
+abrir o google chrome
+  open 'google-chrome'
+#@:abrir Firefox
+abrir firefox
+  open 'firefox'
+#@:Mudar minhas informações : Mudar meus dados
+<mudar,modificar,editar> minhas informações
+  edit_details

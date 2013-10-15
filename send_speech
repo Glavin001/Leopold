@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#### This file is depreciated. Please use send_speech.py
+
 # This should change based on language.
 # lang=es or something.
 # Multiple results

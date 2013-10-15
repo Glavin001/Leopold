@@ -14,7 +14,8 @@
 
 
 
-cd $(dirname $0) # Current directory
+# Go to the install directory (follow the symlink)
+cd "$(dirname $(readlink -f $0))"
 
 # To think of it, it should be the only places we call config too, if other
 # scripts need those variables, they should be exported.

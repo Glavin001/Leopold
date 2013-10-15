@@ -1,4 +1,3 @@
+#@:exit dication mode
 <exit,end,stop,leave> dictation mode
   mode main
-(LINE catch_all)
-  type "$catch_all$\\r"
