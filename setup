@@ -3,9 +3,67 @@
 # Setup speech recognition for the person.
 # Do NOT run this script as root, because it can cause problems with files rights
 
-command="apt-get install sox python-argparse wget espeak xautomation xvkbd -y"
+# Check if running as Root
+if [[ $EUID -ne 0 ]]; 
+then
+	# Not root
+   	#echo "This script must be run as root" 
+   	#exit 1
+   	echo "Preparing to install."
+else 
+	# Is Root
+	echo "Do NOT run this script as root, because it can cause problems with files rights"
+	exit 1
+fi
 
-if which "gksu"
+function setPackageManager() 
+{
+	if ! which "$1" > /dev/null; 
+	then
+	   	echo "Package Manager '$1' not found!"
+	else 
+		packageManager="$1"
+		echo "Package Manager '$packageManager' found!"
+	fi
+}
+
+# Check for package manager to install dependencies
+packageManager=""
+if [ "$(uname)" == "Darwin" ]; then
+    # Do something under Mac OS X platform
+    echo "Detected Mac platform"
+    setPackageManager "brew"      
+	if [ "$packageManager" == "" ]; then 
+		setPackageManager "port" 
+	fi
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    # Do something under Linux platform
+    echo "Detected Linux platform"
+    setPackageManager "apt-get"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+    # Do something under Windows NT platform
+    echo "Detected Windows NT Platform"
+fi
+if [ "$packageManager" == "" ]; then 
+	setPackageManager "apt-get" # Default is Ubuntu's apt-get
+fi
+if [ "$packageManager" == "" ]; then 
+	echo "Enter your Operating System's Package Manager: "
+	read
+	setPackageManager "$REPLY"
+fi
+if [ "$packageManager" == "" ]; then 
+	echo "No package manager."
+	exit 1
+fi
+# Install
+packages="sox wget pygtk" # espeak, argparse, xautomation, xvkbd
+command="$packageManager install $packages"
+echo "Installing dependencies..."
+# Mac's Brew does not run as Root
+if [ "$packageManager" == "brew" ]; then
+	eval "$command"
+elif which "gksu"
 then
     gksu -S "$command"
 elif which "kdesudo"
@@ -15,11 +73,32 @@ else
     eval "sudo $command"
 fi
 
+# Install Python Arg-parse
+pythonPackages="argparse"
+if ! which "pip" > /dev/null; 
+then
+   	echo "Python Package Manager 'pip' not found!"
+   	echo "See http://www.pip-installer.org/en/latest/installing.html for installation information."
+   	exit 1
+else
+	echo "Installing Python packages." 
+	command="pip install $pythonPackages"
+	if which "gksu"
+	then
+	    gksu -S "$command"
+	elif which "kdesudo"
+	then
+	    kdesudo "$command"
+	else
+	    eval "sudo $command"
+	fi
+fi
+
 DIR="$(pwd)"
 
-echo Assuming all files are in "'$DIR'"
+echo "Assuming all files are in '$DIR'"
 
-touch Recognition/dictionary.c
+touch Recognition/src/dictionary.c
 cd Recognition
 make
 cd ..
