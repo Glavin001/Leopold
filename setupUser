@@ -1,0 +1,39 @@
+#!/bin/bash
+
+echo "Setting up your user account."
+
+mkdir $HOME/.leopold/
+touch $HOME/.leopold/UserInfo
+cp Recognition/config/BlankInfo $HOME/.leopold/UserInfo
+
+# useradd1.sh - A simple shell script to display the form dialog on screen
+# set field names i.e. shell variables
+first=""
+last=""
+email=""
+lang=""
+
+# open fd
+exec 3>&1
+
+# Store data to $VALUES variable
+VALUES=$(dialog --ok-label "Setup User" \
+--backtitle "Leopold" \
+--title "Setup User" \
+--form "Setup a new user." \
+15 50 0 \
+"First name:"   1 1 "$first"    1 12 20 0 \
+"Last name:"    2 1 "$last"     2 12 20 0 \
+"Email:"        3 1 "$email"    3 12 40 0 \
+"Language:"     4 1 "$lang"     4 12 4 0 \
+2>&1 1>&3)
+
+# close fd
+exec 3>&-
+
+# display values just entered
+#echo "$VALUES"
+
+echo "Saving user."
+
+echo "FIRST=$first"$'\r' >> $HOME/.leopold/UserInfo

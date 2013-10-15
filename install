@@ -57,7 +57,7 @@ if [ "$packageManager" == "" ]; then
 	exit 1
 fi
 # Install
-packages="sox wget pygtk" # espeak, argparse, xautomation, xvkbd
+packages="sox wget dialog" # pygtk, espeak, argparse, xautomation, xvkbd
 command="$packageManager install $packages"
 echo "Installing dependencies..."
 # Mac's Brew does not run as Root
@@ -101,21 +101,27 @@ echo "Compiling recognition query engine..."
 touch Recognition/src/dictionary.c
 cd Recognition
 make
+
 cd ..
+echo "Removing old dictionaries."
 rm Recognition/modes/main.dic
 rm -r Recognition/bin/
 rm $HOME/.palaver.d/plugins.db
 rm $HOME/.palaver.d/UserInfo
 rm -r $HOME/.palaver.d/configs
+echo "Configuring setup."
 mkdir $HOME/.palaver.d/
 cp -r Recognition/config/defaultBin Recognition/bin
 touch $HOME/.palaver.d/UserInfo
 cp Recognition/config/BlankInfo $HOME/.palaver.d/UserInfo
 touch Recognition/modes/main.dic
 cp Recognition/config/defaultMain.dic Recognition/modes/main.dic
+
 # ./installDefault # see issue #9
+./setupUser
 
 mkdir tmp
 
 # nohup Recognition/bin/goto 'http://palaver.bmandesigns.com/thanks' "nohup.out" &
 echo "Done, you will have to setup the hotkey yourself."
+
