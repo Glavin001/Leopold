@@ -113,7 +113,7 @@ touch $HOME/.palaver.d/UserInfo
 cp Recognition/config/BlankInfo $HOME/.palaver.d/UserInfo
 touch Recognition/modes/main.dic
 cp Recognition/config/defaultMain.dic Recognition/modes/main.dic
-./installDefault
+# ./installDefault # see issue #9
 
 mkdir tmp
 
