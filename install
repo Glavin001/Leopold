@@ -57,8 +57,9 @@ if [ "$packageManager" == "" ]; then
 	exit 1
 fi
 # Install
-packages="sox wget dialog" # pygtk, espeak, argparse, xautomation, xvkbd
+packages="sox wget qt" # dialog, pygtk, espeak, argparse, xautomation, xvkbd
 command="$packageManager install $packages"
+echo
 echo "Installing dependencies..."
 # Mac's Brew does not run as Root
 if [ "$packageManager" == "brew" ]; then
@@ -75,6 +76,7 @@ fi
 
 # Install Python Arg-parse
 pythonPackages="argparse watchdog" #pyinotify
+echo
 if ! which "pip" > /dev/null; 
 then
    	echo "Python Package Manager 'pip' not found!"
@@ -95,32 +97,51 @@ else
 fi
 
 DIR="$(pwd)"
+echo
 echo "Assuming all files are in '$DIR'"
-
+mkdir tmp > /dev/null 2>&1
 echo "Compiling recognition query engine..."
 touch Recognition/src/dictionary.c
 cd Recognition
-make
-
+touch log.txt
+make >> log.txt 2>&1
+echo "Done"
+echo
 cd ..
+echo "Compiling the On-Screen Display"
+touch Microphone/osd_server.cpp
+cd Microphone
+touch log.txt
+# qmake -project >> log.txt 2>&1 
+qmake >> log.txt 2>&1
+make >> log.txt 2>&1
+echo "Done"
+echo
+cd ..
+
 echo "Removing old dictionaries."
-rm Recognition/modes/main.dic
-rm -r Recognition/bin/
-rm $HOME/.palaver.d/plugins.db
-rm $HOME/.palaver.d/UserInfo
-rm -r $HOME/.palaver.d/configs
+rm Recognition/modes/main.dic  > /dev/null 2>&1
+rm -r Recognition/bin/  > /dev/null 2>&1
+rm $HOME/.palaver.d/plugins.db  > /dev/null 2>&1
+rm $HOME/.palaver.d/UserInfo  > /dev/null 2>&1
+rm -r $HOME/.palaver.d/configs  > /dev/null 2>&1
 echo "Configuring setup."
-mkdir $HOME/.palaver.d/
-cp -r Recognition/config/defaultBin Recognition/bin
+mkdir $HOME/.palaver.d/ > /dev/null 2>&1
+cp -r Recognition/config/defaultBin Recognition/bin 
 touch $HOME/.palaver.d/UserInfo
 cp Recognition/config/BlankInfo $HOME/.palaver.d/UserInfo
 touch Recognition/modes/main.dic
 cp Recognition/config/defaultMain.dic Recognition/modes/main.dic
 
 # ./installDefault # see issue #9
-./setupUser
-
-mkdir tmp
+echo
+read -p "Would you like to setup user account? [Y/n]: " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	# Yes, setup user
+    ./setupUser
+fi
 
 # nohup Recognition/bin/goto 'http://palaver.bmandesigns.com/thanks' "nohup.out" &
 echo "Done, you will have to setup the hotkey yourself."

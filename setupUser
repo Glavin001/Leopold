@@ -2,7 +2,7 @@
 
 echo "Setting up your user account."
 
-mkdir $HOME/.leopold/
+mkdir $HOME/.leopold/   > /dev/null 2>&1
 touch $HOME/.leopold/UserInfo
 
 echo "I will need your personal information to create your account."
@@ -25,3 +25,5 @@ EMAIL=${email}
 LANGUAGE=${lang}
 EOL
 
+echo "Done."
+echo

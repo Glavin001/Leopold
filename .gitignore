@@ -4,6 +4,13 @@ MODE
 tmp.sp
 InstallResult
 
+# Logs
+log.txt
+*.log
+
+# Mac
+.DS_Store
+
 #Process IDs
 *.pid
 
@@ -36,3 +43,6 @@ InstallResult
 #ignore intellij files
 .idea
 *.iml
+
+# Build exports
+Microphone/build
