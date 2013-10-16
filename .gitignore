@@ -3,6 +3,7 @@ result.json
 MODE
 tmp.sp
 InstallResult
+tmp/*
 
 # Logs
 log.txt

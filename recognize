@@ -24,19 +24,18 @@ cd "$(./getInstallDir $0)"
 while read line           
 do           
     export "$line"           
-done <$USER_DIR/UserInfo
+done < "$USER_DIR/UserInfo"
 
 # Try to run a command in ./Recognition/bin with useful errors.
 function run_command() {
     while read line           
     do           
 	export "$line"           
-    done <$USER_DIR/UserInfo
+    done <"$USER_DIR/UserInfo"
     bin=$(./Recognition/find_bin "${1%% *}" "${USER_DIR}/Plugins/" "./Plugins/")
     if [ ! -z "$bin" ]
     then
-	eval "$bin ${1#* }"
-	
+	eval "'$bin' ${1#* }"	
 	if [ $? != 0 ];then
 	    ./Recognition/bin/result Error "There was an error while running:" \
 		"$1" ""
@@ -107,7 +106,7 @@ if [ -d "$USER_DIR/Plugins" ];then
     add=""
     if [ "$mode" == "main" ]
     then
-	add="\n$(./Recognition/find_dic actions ${USER_DIR}/Plugins $LANGUAGE)"
+	add="\n$(./Recognition/find_dic actions "${USER_DIR}/Plugins" $LANGUAGE)"
     fi
     # We read dictionnaries :
     while read -r dictionary
@@ -126,7 +125,7 @@ if [ -d "$USER_DIR/Plugins" ];then
 		echo "There is an error in $dictionary"
 	    fi
 	fi
-    done < <(echo -e "$(./Recognition/find_dic $mode ${USER_DIR}/Plugins $LANGUAGE)$add")
+    done < <(echo -e "$(./Recognition/find_dic $mode "${USER_DIR}/Plugins" $LANGUAGE)$add")
 fi
 
 # We search in the <installation>/Plugins directory

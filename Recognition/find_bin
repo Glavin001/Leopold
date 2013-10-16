@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-current_path=$(pwd)
+current_path="$(pwd)"
 name=$1
 paths=$2
 shift
@@ -27,7 +27,7 @@ do
 	cd "$line"
         # I don't filter the folder /bin in order to keep the "short
         # syntax" system (with all files in one folder) usable
-	result=$(find $(pwd) -type f | grep -e "/${name}$" | head -n 1)
+	result=$(find "$(pwd)" -type f | grep -e "/${name}$" | head -n 1)
 	if [ ! -z "$result" ]
 	then
 	    echo -n "$result"
