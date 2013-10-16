@@ -14,10 +14,12 @@
    #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # TODO, make this use the mode, context and custom sed script
 
-USER_DIR=$HOME/.palaver.d
+#USER_DIR=$HOME/.palaver.d
+USER_DIR="$(./getUserDir)"
 
 # Go to the install directory (follow the symlink)
-cd "$(dirname $(readlink -f $0))"
+#cd "$(dirname $(./readlinkF $0))"
+cd "$(./getInstallDir $0)"
 
 while read line           
 do           
