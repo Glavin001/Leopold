@@ -1,6 +1,7 @@
 #!/bin/bash
 
-TARGET_FILE=$1
+#TARGET_FILE=$1
+TARGET_FILE=$0
 
 cd `dirname $TARGET_FILE`
 TARGET_FILE=`basename $TARGET_FILE`
@@ -19,4 +20,7 @@ PHYS_DIR=`pwd -P`
 RESULT=$PHYS_DIR/$TARGET_FILE
 #echo $RESULT
 
+# Move up on level to installDir from bin/
+cd "$(dirname "$RESULT")" # installDir/bin/
+RESULT=`pwd -P`
 echo "$(dirname "$RESULT")"

@@ -2,10 +2,10 @@
 
 echo "Setting up your user account."
 
-USER_DIR="$(./getUserDir)"
+USER_DIR="$(./getUserDir.sh)"
 
-mkdir $USER_DIR   > /dev/null 2>&1
-touch $USER_DIR/UserInfo
+mkdir "$USER_DIR" > /dev/null 2>&1
+touch "$USER_DIR/UserInfo"
 
 echo "I will need your personal information to create your account."
 echo -n "Enter your first name [ENTER]: "
@@ -19,8 +19,10 @@ read lang
 
 echo "Saving user."
 
-cp Recognition/config/BlankInfo $USER_DIR/UserInfo
-cat > $USER_DIR/UserInfo << EOL
+cd "$(./getInstallDir.sh)"
+
+cp recognition/config/BlankInfo "$USER_DIR/UserInfo"
+cat > "$USER_DIR/UserInfo" << EOL
 FIRST=${firstName}
 LAST=${lastName}
 EMAIL=${email}

@@ -2,7 +2,8 @@
 
 # Setup speech recognition for the person.
 # Do NOT run this script as root, because it can cause problems with files rights
-USER_DIR="$(./getUserDir)"
+cd ${0%/*}
+USER_DIR="$(./getUserDir.sh)"
 
 # Check if running as Root
 if [[ $EUID -ne 0 ]]; 
@@ -97,21 +98,22 @@ else
 	fi
 fi
 
-DIR="$(pwd)"
+DIR="$(pwd)" # Save directory
+cd "$(./getInstallDir.sh)"
 echo
 echo "Assuming all files are in '$DIR'"
-mkdir tmp > /dev/null 2>&1
+mkdir temp > /dev/null 2>&1
 echo "Compiling recognition query engine..."
-touch Recognition/src/dictionary.c
-cd Recognition
+cd recognition
+touch src/dictionary.c
 touch log.txt
 make >> log.txt 2>&1
 echo "Done"
 echo
 cd ..
 echo "Compiling the On-Screen Display"
-touch Microphone/osd_server.cpp
-cd Microphone
+cd microphone
+touch osd_server.cpp
 touch log.txt
 # qmake -project >> log.txt 2>&1 
 qmake >> log.txt 2>&1
@@ -121,18 +123,21 @@ echo
 cd ..
 
 echo "Removing old dictionaries."
-rm Recognition/modes/main.dic  > /dev/null 2>&1
-rm -r Recognition/bin/  > /dev/null 2>&1
+rm recognition/modes/main.dic  > /dev/null 2>&1
+rm -r recognition/bin/  > /dev/null 2>&1
 rm $USER_DIR/plugins.db  > /dev/null 2>&1
 rm $USER_DIR/UserInfo  > /dev/null 2>&1
 rm -r $USER_DIR/configs  > /dev/null 2>&1
 echo "Configuring setup."
 mkdir $USER_DIR/ > /dev/null 2>&1
-cp -r Recognition/config/defaultBin Recognition/bin 
+cp -r recognition/config/defaultBin recognition/bin 
 touch $USER_DIR/UserInfo
-cp Recognition/config/BlankInfo $USER_DIR/UserInfo
-touch Recognition/modes/main.dic
-cp Recognition/config/defaultMain.dic Recognition/modes/main.dic
+cp recognition/config/BlankInfo $USER_DIR/UserInfo
+touch recognition/modes/main.dic
+cp recognition/config/defaultMain.dic recognition/modes/main.dic
+
+#cd "$DIR" # Restore directory
+cd bin/
 
 # ./installDefault # see issue #9
 echo
@@ -141,7 +146,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Yes, setup user
-    ./setupUser
+    ./setupUser.sh
 fi
 
 # nohup Recognition/bin/goto 'http://palaver.bmandesigns.com/thanks' "nohup.out" &
