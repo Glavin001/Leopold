@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Source: http://stackoverflow.com/a/1116890/2578205
+
 #TARGET_FILE=$1
 TARGET_FILE=$0
 cd `dirname $TARGET_FILE`
