@@ -3,7 +3,7 @@
 # Setup speech recognition for the person.
 # Do NOT run this script as root, because it can cause problems with files rights
 
-# 
+# Source: http://stackoverflow.com/a/1116890/2578205
 TARGET_FILE=$0
 cd `dirname $TARGET_FILE`
 TARGET_FILE=`basename $TARGET_FILE`
