@@ -14,48 +14,49 @@
    #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # TODO, make this use the mode, context and custom sed script
 
+cd ${0%/*}
 #USER_DIR=$HOME/.palaver.d
-USER_DIR="$(./getUserDir)"
+USER_DIR="$(./getUserDir.sh)"
 
 # Go to the install directory (follow the symlink)
 #cd "$(dirname $(./readlinkF $0))"
-cd "$(./getInstallDir $0)"
+cd "$(./getInstallDir.sh $0)"
 
 while read line           
 do           
     export "$line"           
 done < "$USER_DIR/UserInfo"
 
-# Try to run a command in ./Recognition/bin with useful errors.
+# Try to run a command in ./recognition/bin with useful errors.
 function run_command() {
     while read line           
     do           
 	export "$line"           
     done <"$USER_DIR/UserInfo"
-    bin=$(./Recognition/find_bin "${1%% *}" "${USER_DIR}/Plugins/" "./Plugins/")
+    bin=$(./recognition/find_bin "${1%% *}" "${USER_DIR}/Plugins/" "./Plugins/")
     if [ ! -z "$bin" ]
     then
 	eval "'$bin' ${1#* }"	
 	if [ $? != 0 ];then
-	    ./Recognition/bin/result Error "There was an error while running:" \
+	    ./recognition/bin/result Error "There was an error while running:" \
 		"$1" ""
 	    exit 1
 	fi
     else
-	./Recognition/bin/result Error "File not found :" \
+	./recognition/bin/result Error "File not found :" \
 	    "$1" ""
 	exit 1
     fi
 }
 
-read mode < MODE
+read mode < MODE.txt
 
 speech="$1"
 
 # Use sed scripts here.
 if [ -z "$speech" ];then
     echo "Speech unable to be transcribed."
-    ./Recognition/bin/result "Speech unable to be transcribed"
+    ./recognition/bin/result "Speech unable to be transcribed"
     exit 1
 fi
 
@@ -86,7 +87,7 @@ echo "After treatment : $speech" >> last_speech.log
 
 # We search in .palader.d/personal.dic
 if [ -e "$USER_DIR/personal.dic" ];then
-    COMMAND=$(./Recognition/dictionary "$speech"\
+    COMMAND=$(./recognition/dictionary "$speech"\
  "$USER_DIR/personal.dic")
 
     EXIT=$?
@@ -106,14 +107,14 @@ if [ -d "$USER_DIR/Plugins" ];then
     add=""
     if [ "$mode" == "main" ]
     then
-	add="\n$(./Recognition/find_dic actions "${USER_DIR}/Plugins" $LANGUAGE)"
+	add="\n$(./recognition/find_dic actions "${USER_DIR}/Plugins" $LANGUAGE)"
     fi
     # We read dictionnaries :
     while read -r dictionary
     do
 	if [ ! -z "$dictionary" ]
 	then
-	    COMMAND=$(./Recognition/dictionary "$speech"\
+	    COMMAND=$(./recognition/dictionary "$speech"\
  "$dictionary")
 	    
 	    EXIT=$?
@@ -125,7 +126,7 @@ if [ -d "$USER_DIR/Plugins" ];then
 		echo "There is an error in $dictionary"
 	    fi
 	fi
-    done < <(echo -e "$(./Recognition/find_dic $mode "${USER_DIR}/Plugins" $LANGUAGE)$add")
+    done < <(echo -e "$(./recognition/find_dic $mode "${USER_DIR}/Plugins" $LANGUAGE)$add")
 fi
 
 # We search in the <installation>/Plugins directory
@@ -133,13 +134,13 @@ if [ -d "Plugins" ];then
     add=""
     if [ "$mode" == "main" ]
     then
-	add="\n$(./Recognition/find_dic actions Plugins $LANGUAGE)"
+	add="\n$(./recognition/find_dic actions Plugins $LANGUAGE)"
     fi
     while read -r dictionary
     do
 	if [ ! -z "$dictionary" ]
 	then
-	    COMMAND=$(./Recognition/dictionary "$speech"\
+	    COMMAND=$(./recognition/dictionary "$speech"\
  "$dictionary")
 	    
 	    EXIT=$?
@@ -151,14 +152,14 @@ if [ -d "Plugins" ];then
 		echo "There is an error in $dictionary"
 	    fi
 	fi
-    done < <(echo -e "$(./Recognition/find_dic $mode Plugins $LANGUAGE)$add")
+    done < <(echo -e "$(./recognition/find_dic $mode Plugins $LANGUAGE)$add")
 fi
 
 if [ "$EXIT" == 2 ];then
-    ./Recognition/bin/result Error "'$speech'" "is not a recognized command" ""
+    ./recognition/bin/result Error "'$speech'" "is not a recognized command" ""
 
 else 
     echo "There is an error in ${dictionary}"
-    ./Recognition/bin/result Error "There was an error while reading $dictionary" \
+    ./recognition/bin/result Error "There was an error while reading $dictionary" \
 	"$COMMAND" ""
 fi
