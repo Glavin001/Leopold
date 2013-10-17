@@ -6,4 +6,4 @@ for i in "$@";do
     echo $i >> Microphone/result
 done
 
-./pycmd result
+./bin/pycmd.sh result
