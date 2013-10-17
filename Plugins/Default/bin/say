@@ -9,8 +9,7 @@
 #    play -q "|espeak -s 150 -p 30 \"$1\" --stdout"
 #fi
 
-TEMP_DIR="tmp"
-INPUT="$*"
+INPUT=$*
 STRINGNUM=0
 ary=($INPUT)
 for key in "${!ary[@]}"
@@ -27,16 +26,16 @@ SHORTTMP[$STRINGNUM]="${ary[$key]}"
 SHORT[$STRINGNUM]="${ary[$key]}"
 fi
 done
+cd temp/
 for key in "${!SHORT[@]}"
 do
 google_say() { 
     local IFS=+;
     sayUrl="http://translate.google.com/translate_tts?tl=en&q=${SHORT[$key]}"; 
     #echo $sayUrl;
-    mkdir "$TEMP_DIR" >> /dev/null 2>&1
-    wget -q -U "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36" -O "$TEMP_DIR/say.mp3" "$sayUrl" >> /dev/null 2>&1
-    play "$TEMP_DIR/say.mp3" >> /dev/null 2>&1
-    # rm "$TEMP_DIR/say.mp3" >> /dev/null 2>&1
+    wget -q -U "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36" -O "say.mp3" "$sayUrl" >> /dev/null 2>&1
+    play say.mp3 >> /dev/null 2>&1
+    rm say.mp3 >> /dev/null 2>&1
     # mplayer -ao alsa -really-quiet -noconsolecontrols $sayUrl;
 }
 google_say $*

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-> microphone/result
+> Microphone/result
 
 for i in "$@";do
-    echo $i >> microphone/result
+    echo $i >> Microphone/result
 done
 
-./bin/pycmd.sh result
+./pycmd result

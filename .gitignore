@@ -3,7 +3,7 @@ result.json
 MODE
 tmp.sp
 InstallResult
-tmp/*
+temp/*
 
 # Logs
 log.txt
@@ -11,6 +11,7 @@ log.txt
 
 # Mac
 .DS_Store
+*.app
 
 #Process IDs
 *.pid
@@ -46,5 +47,5 @@ log.txt
 *.iml
 
 # Build exports
-Microphone/build
-Microphone/Makefile
+microphone/build
+microphone/Makefile
