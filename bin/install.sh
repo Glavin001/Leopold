@@ -77,11 +77,12 @@ else
 fi
 
 # Install Python Arg-parse
+<<'COMMENT'
 pythonPackages="argparse watchdog" #pyinotify
 echo
 if ! which "pip" > /dev/null; 
 then
-   	echo "Python Package Manager 'pip' not found!"
+   	echo "Python Package Manager *pip* not found!"
    	echo "See http://www.pip-installer.org/en/latest/installing.html for installation information."
    	exit 1
 else
@@ -97,6 +98,7 @@ else
 	    eval "sudo $command"
 	fi
 fi
+COMMENT
 
 DIR="$(pwd)" # Save directory
 cd "$(./getInstallDir.sh)"
