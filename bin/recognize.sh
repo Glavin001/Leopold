@@ -85,8 +85,8 @@ speech="$1"
 # Use sed scripts here.
 if [ -z "$speech" ];then
     echo "Speech unable to be transcribed."
-    #./recognition/bin/result "Speech unable to be transcribed"
-    ./plugins/Default/bin/result "Speech unable to be transcribed"
+    ./recognition/bin/result "Speech unable to be transcribed"
+    #./plugins/Default/bin/result "Speech unable to be transcribed"
     exit 1
 fi
 

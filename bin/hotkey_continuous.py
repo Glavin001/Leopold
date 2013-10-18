@@ -93,6 +93,7 @@ while True:
             content = audio_file.read()
         audio_file.closed
 
+        os.system("rm temp/rec.mp3 > /dev/null 2>&1") # Remove old file
         os.system("rm temp/rec.flac > /dev/null 2>&1") # Remove old file
 
         stt = Stt()
