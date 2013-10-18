@@ -1,12 +1,9 @@
 #!/bin/bash
 
-
-
 if [ -z "$1" ];then
     echo "You haven't asked anything!"
     exit 1
 fi
-
 
 # This is kinda stealing resources, it's okay for testing, but lets
 # call MIT START and wolfram on our own.

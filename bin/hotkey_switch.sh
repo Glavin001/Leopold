@@ -31,7 +31,7 @@ if [ -e "speech.pid" ];then
     ./recognize "$RESULT"
 
     # Only takes effect if a script did not use pycmd result
-    if [ ! -e "Microphone/result" ];then
+    if [ ! -e "microphone/result" ];then
 	./pycmd done
     fi
 

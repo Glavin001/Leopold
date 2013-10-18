@@ -22,7 +22,7 @@ RESULT=$PHYS_DIR/$TARGET_FILE
 # Move up on level to installDir from bin/
 cd "$(dirname "$RESULT")" # installDir/bin/
 RESULT=`pwd -P`
-echo "$(dirname "$RESULT")"
+#echo "$(dirname "$RESULT")"
 
 #cd "${0%/*}"
 
@@ -156,8 +156,8 @@ rm -r $USER_DIR/configs  > /dev/null 2>&1
 echo "Configuring setup."
 mkdir $USER_DIR/ > /dev/null 2>&1
 cp -r recognition/config/defaultBin recognition/bin 
-touch $USER_DIR/UserInfo
-cp recognition/config/BlankInfo $USER_DIR/UserInfo
+#touch $USER_DIR/UserInfo
+#cp recognition/config/BlankInfo $USER_DIR/UserInfo
 touch recognition/modes/main.dic
 cp recognition/config/defaultMain.dic recognition/modes/main.dic
 

@@ -14,7 +14,29 @@
    #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # TODO, make this use the mode, context and custom sed script
 
-cd ${0%/*}
+# Source: http://stackoverflow.com/a/1116890/2578205
+TARGET_FILE=$0
+cd `dirname $TARGET_FILE`
+TARGET_FILE=`basename $TARGET_FILE`
+# Iterate down a (possible) chain of symlinks
+while [ -L "$TARGET_FILE" ]
+do
+    TARGET_FILE=`readlink $TARGET_FILE`
+    cd `dirname $TARGET_FILE`
+    TARGET_FILE=`basename $TARGET_FILE`
+done
+# Compute the canonicalized name by finding the physical path 
+# for the directory we're in and appending the target file.
+PHYS_DIR=`pwd -P`
+RESULT=$PHYS_DIR/$TARGET_FILE
+#echo $RESULT
+# Move up on level to installDir from bin/
+cd "$(dirname "$RESULT")" # installDir/bin/
+RESULT=`pwd -P`
+#echo "$(dirname "$RESULT")"
+
+#cd ${0%/*}
+
 #USER_DIR=$HOME/.palaver.d
 USER_DIR="$(./getUserDir.sh)"
 
@@ -49,18 +71,26 @@ function run_command() {
     fi
 }
 
-read mode < MODE.txt
+touch temp/MODE.txt
+read mode < temp/MODE.txt
+# Test if set
+if [ -z "$mode" ]; then
+    echo "Mode not set."
+    mode="main"
+    echo "$mode" > temp/MODE.txt
+fi
 
 speech="$1"
 
 # Use sed scripts here.
 if [ -z "$speech" ];then
     echo "Speech unable to be transcribed."
-    ./recognition/bin/result "Speech unable to be transcribed"
+    #./recognition/bin/result "Speech unable to be transcribed"
+    ./plugins/Default/bin/result "Speech unable to be transcribed"
     exit 1
 fi
 
-rm Microphone/result 2>/dev/null
+rm microphone/result 2>/dev/null
 
 echo "Before treatment : $speech" > last_speech.log
 

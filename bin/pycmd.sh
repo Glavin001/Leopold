@@ -22,8 +22,7 @@ RESULT=$PHYS_DIR/$TARGET_FILE
 # Move up on level to installDir from bin/
 cd "$(dirname "$RESULT")" # installDir/bin/
 RESULT=`pwd -P`
-echo "$(dirname "$RESULT")"
-
+#echo "$(dirname "$RESULT")"
 
 function error() {
     echo "Accepted modes:"
@@ -41,41 +40,42 @@ fi
 if ps auxww |grep -v grep |grep osd_server > /dev/null 2>&1;then
     : # we are good, the server is there
 else # otherwise start it
-    ./Microphone/osd_server.py 2>/dev/null & 
+    ./microphone/osd_server.py 2>/dev/null & 
 	echo $! > "osd.pid"
 fi  
 if ps auxww |grep -v grep |grep indicator_server.py > /dev/null 2>&1;then
     : # we are good, the server is there
 else # otherwise start it
-    ./Microphone/indicator_server.py 2>/dev/null & 
+    ./microphone/indicator_server.py 2>/dev/null & 
     echo $! > "indicator.pid"
 fi    
+
 # This should be run from the base dir.
-cd Microphone
+cd ../temp/
 
 case "$1" in
     wait)
-	rm pycmd_*
-	touch pycmd_wait
+    	rm pycmd_*
+    	touch pycmd_wait
 	;;
     done)
-	rm pycmd_*
-	touch pycmd_done
+    	rm pycmd_*
+    	touch pycmd_done
 	;;
     stop)
-	rm pycmd_*
-	touch pycmd_stop
+    	rm pycmd_*
+    	touch pycmd_stop
 	;;
     record)
-	rm pycmd_*
-	touch pycmd_record
+    	rm pycmd_*
+    	touch pycmd_record
 	;;
     result)
-	rm pycmd_*
-	touch pycmd_result
+    	rm pycmd_*
+    	touch pycmd_result
 	;;
     *)
-	error
+	   error
 	;;
 esac
 
