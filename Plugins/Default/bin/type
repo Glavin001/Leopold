@@ -1,3 +1,13 @@
 #!/bin/bash
 
-xvkbd -text "$1"
+# Ubuntu/etc
+if which "xvkbd" > /dev/null; 
+then
+	xvkbd -text "$1"
+fi
+
+# Mac
+if which "osascript" > /dev/null; 
+then
+	osascript -e "tell application \"System Events\" to keystroke \"$1\" "
+fi
