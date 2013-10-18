@@ -14,10 +14,6 @@
    #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # TODO, make this use the mode, context and custom sed script
 
-echo "Enter $(pwd)"
-
-echo "$0"
-
 # Source: http://stackoverflow.com/a/1116890/2578205
 TARGET_FILE=$0
 cd "`dirname "$TARGET_FILE"`"
@@ -38,8 +34,6 @@ RESULT=$PHYS_DIR/$TARGET_FILE
 cd "$(dirname "$RESULT")" # installDir/bin/
 RESULT=`pwd -P`
 #echo "$(dirname "$RESULT")"
-
-echo "End $(pwd)"
 
 #cd ${0%/*}
 

@@ -14,7 +14,7 @@ echo -n "Enter your last name [ENTER]: "
 read lastName
 echo -n "Enter your email [ENTER]: "
 read email
-echo -n "Enter your language (en=English) [ENTER]: "
+echo -n "Enter your language (en=English,es,fr,pt) [ENTER]: "
 read lang
 
 echo "Saving user."
@@ -27,6 +27,10 @@ FIRST=${firstName}
 LAST=${lastName}
 EMAIL=${email}
 LANGUAGE=${lang}
+COMPUTER_SPEAK=true
+COMPUTER_CALL=true
+COMPUTER_HELLO=hello computer
+COMPUTER_GOODBYE=goodbye
 EOL
 
 echo "Done."
