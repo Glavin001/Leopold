@@ -50,13 +50,18 @@ if get_variable('COMPUTER_SPEAK') == "true":
 def tell(text):
     print "tell '"+text+"'"
     if speak:
-        os.system("'" + currentDir + "/plugins/Default/bin/say' "+ language +" \""+ text + "\" &")
+        os.system("'" + currentDir + "/plugins/Default/bin/say' "+ language +" \""+ text + "\" ")
+
+def recognize(text):
+    print "recognize '"+text+"'"
+    os.system("'" + currentDir + "/bin/recognize.sh' \""+ text + "\" &")
+
     
 binDir = os.path.dirname(os.path.realpath(__file__))
 currentDir = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', ''))
 
 language = get_variable('LANGUAGE', 'en')
-get_variable('BIDUIFDQ')
+#get_variable('BIDUIFDQ')
 
 # You can now call the computer before running a command
 listen = False
@@ -100,6 +105,10 @@ while True:
         text = stt.speech_to_text(content)
         if text:
             text = text.encode('utf-8').strip()
+
+            recognize(text)
+
+            '''
             if listen and text == computer_goodbye:
                 print "I was proud to help you."
                 listen = False
@@ -115,5 +124,7 @@ while True:
             else:
                 print "Please, call me, I'm ",computer_hello," and you called ",text
                 tell(transText("Please call me") + computer_hello)
+            '''
+
         else:
             print 'No text was returned'

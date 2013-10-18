@@ -14,16 +14,20 @@
    #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # TODO, make this use the mode, context and custom sed script
 
+echo "Enter $(pwd)"
+
+echo "$0"
+
 # Source: http://stackoverflow.com/a/1116890/2578205
 TARGET_FILE=$0
-cd `dirname $TARGET_FILE`
-TARGET_FILE=`basename $TARGET_FILE`
+cd "`dirname "$TARGET_FILE"`"
+TARGET_FILE=`basename "$TARGET_FILE"`
 # Iterate down a (possible) chain of symlinks
 while [ -L "$TARGET_FILE" ]
 do
-    TARGET_FILE=`readlink $TARGET_FILE`
-    cd `dirname $TARGET_FILE`
-    TARGET_FILE=`basename $TARGET_FILE`
+    TARGET_FILE=`readlink "$TARGET_FILE"`
+    cd `dirname "$TARGET_FILE"`
+    TARGET_FILE=`basename "$TARGET_FILE"`
 done
 # Compute the canonicalized name by finding the physical path 
 # for the directory we're in and appending the target file.
@@ -34,6 +38,8 @@ RESULT=$PHYS_DIR/$TARGET_FILE
 cd "$(dirname "$RESULT")" # installDir/bin/
 RESULT=`pwd -P`
 #echo "$(dirname "$RESULT")"
+
+echo "End $(pwd)"
 
 #cd ${0%/*}
 
