@@ -147,19 +147,15 @@ echo "Done"
 echo
 cd ..
 
-echo "Removing old dictionaries."
-rm recognition/modes/main.dic  > /dev/null 2>&1
-rm -r recognition/bin/  > /dev/null 2>&1
-rm $USER_DIR/plugins.db  > /dev/null 2>&1
-rm $USER_DIR/UserInfo  > /dev/null 2>&1
-rm -r $USER_DIR/configs  > /dev/null 2>&1
-echo "Configuring setup."
-mkdir $USER_DIR/ > /dev/null 2>&1
-cp -r recognition/config/defaultBin recognition/bin 
-#touch $USER_DIR/UserInfo
-#cp recognition/config/BlankInfo $USER_DIR/UserInfo
-touch recognition/modes/main.dic
-cp recognition/config/defaultMain.dic recognition/modes/main.dic
+#echo "Removing old dictionaries."
+#rm recognition/modes/main.dic  > /dev/null 2>&1
+#rm $USER_DIR/plugins.db  > /dev/null 2>&1
+#rm $USER_DIR/UserInfo  > /dev/null 2>&1
+#rm -r $USER_DIR/configs  > /dev/null 2>&1
+#echo "Configuring setup."
+#mkdir $USER_DIR/ > /dev/null 2>&1
+#touch recognition/modes/main.dic
+#cp recognition/config/defaultMain.dic recognition/modes/main.dic
 
 # Setup Node.js server
 echo
@@ -188,5 +184,6 @@ then
 fi
 
 # nohup Recognition/bin/goto 'http://palaver.bmandesigns.com/thanks' "nohup.out" &
+echo
 echo "Done, you will have to setup the hotkey yourself."
 
