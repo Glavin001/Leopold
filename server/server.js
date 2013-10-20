@@ -124,7 +124,7 @@ wsServer.on('request', function(request) {
 });
 
 
-
+/*
 fs.watch("../temp/result", function( event, targetFile ) {
     console.log("File ", event);
     // on file change we can read the new xml
@@ -150,4 +150,4 @@ fs.watch("../temp/result", function( event, targetFile ) {
         }
     });
 });
-
+*/
