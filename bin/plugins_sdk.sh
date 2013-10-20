@@ -1,15 +1,37 @@
 #!/bin/bash
 
+# Source: http://stackoverflow.com/a/1116890/2578205
+TARGET_FILE=$0
+cd `dirname $TARGET_FILE`
+TARGET_FILE=`basename $TARGET_FILE`
+# Iterate down a (possible) chain of symlinks
+while [ -L "$TARGET_FILE" ]
+do
+    TARGET_FILE=`readlink $TARGET_FILE`
+    cd `dirname $TARGET_FILE`
+    TARGET_FILE=`basename $TARGET_FILE`
+done
+# Compute the canonicalized name by finding the physical path 
+# for the directory we're in and appending the target file.
+PHYS_DIR=`pwd -P`
+RESULT=$PHYS_DIR/$TARGET_FILE
+#echo $RESULT
+# Move up on level to installDir from bin/
+cd "$(dirname "$RESULT")" # installDir/bin/
+RESULT=`pwd -P`
+echo $RESULT
+cd ..
+
 message="Options :
 -c <name> : Create package name
 -p <name> : Package name
 -u <name> : Update the plugin.info file
--d        : If present, in current directory, if not in .palaver.d/Plugins
+-d        : If present, in current directory, if not in .leopold/Plugins
 -n        : Non interactive mode (don't run editor with plugin.info)
 -f        : Remove the package without asking if package already exists"
 
 current_dir=$(pwd)
-dir="$HOME/.palaver.d/Plugins/"
+dir="$HOME/.leopold/Plugins/"
 interactive=true
 ask=true
 while getopts ":dc:p:u:nf" opts
@@ -29,7 +51,7 @@ done
 
 # This script create a plugin from this structure (The files .pre are
 # put at the root of the file because it must be at the root of
-# .palaver.d/Plugins/ ):
+# .leopold/Plugins/ ):
 
 # Test
 #  plugin.info
@@ -62,7 +84,7 @@ if [ ! -z "$create_name" ]
 then
     name="$create_name"
     
-    USER_DIR=$HOME/.palaver.d
+    USER_DIR=$HOME/.leopold
     while read line           
     do           
 	export "$line"           
