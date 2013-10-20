@@ -49,3 +49,6 @@ log.txt
 # Build exports
 microphone/build
 microphone/Makefile
+
+# Node.js modules
+node_modules/

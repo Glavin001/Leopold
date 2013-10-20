@@ -161,6 +161,19 @@ cp -r recognition/config/defaultBin recognition/bin
 touch recognition/modes/main.dic
 cp recognition/config/defaultMain.dic recognition/modes/main.dic
 
+# Setup Node.js server
+echo
+read -p "Would you like to setup the Node.js WebSocket Server for the Website JavaScript SDK? [Y/n]: " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	# Yes, setup Node.js
+	npm install
+	echo 
+	echo "Done installing Node.js server dependencies."
+	echo "To run the server use: node server/server.js"
+fi
+
 #cd "$DIR" # Restore directory
 cd bin/
 

@@ -1,0 +1,9 @@
+{
+    "name": "Leopold",
+    "version":"0.0.1",
+    "author": "Glavin Wiechert <glavin.wiechert@gmail.com>",
+    "description": "Virtual Assistant.",
+    "dependencies": {
+        "websocket":"*"
+    }
+}
