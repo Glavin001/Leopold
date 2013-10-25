@@ -19,7 +19,6 @@ RESULT=$PHYS_DIR/$TARGET_FILE
 # Move up on level to installDir from bin/
 cd "$(dirname "$RESULT")" # installDir/bin/
 RESULT=`pwd -P`
-echo $RESULT
 cd ..
 
 message="Options :

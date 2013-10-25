@@ -1,7 +1,12 @@
 // http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
 "use strict";
  
-var fs = require("fs");
+var fs = require("fs"),
+    util = require('util'),
+    restler = require('restler'),
+    path = require('path'),
+    exec = require('child_process').exec,
+    child;
 
 // Optional. You will see this name in eg. 'ps' or 'top' command
 process.title = 'node-chat';
@@ -20,6 +25,9 @@ var http = require('http');
 var history = [ ];
 // list of currently connected clients (users)
 var clients = [ ];
+
+// Get root directory, ./Leopold/
+var rootDir = path.resolve(__dirname, '../');
  
 /**
  * Helper function for escaping input strings
@@ -28,7 +36,97 @@ function htmlEntities(str) {
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
                       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
- 
+/** 
+ Helper function for recording audio
+*/
+function recordAudio(filePath, callback) { 
+    var command = "rec \""+filePath+"\" rate 16k silence -l 1 0.1 1% 1 2.0 1%";
+    console.log("Recording...", command);
+    child = exec(command, // command line argument directly in string
+        { cwd: rootDir },
+      function (error, stdout, stderr) {      // one easy function to capture data/errors
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) {
+          console.log('exec error: ' + error);
+        }
+        return callback && callback();
+    });
+}
+/**
+ Helper function for Speech to Text
+*/
+function speechToText(audioFile, callback) {
+    console.log("speechToText ", audioFile);
+
+    fs.stat(audioFile, function(err, stats) {
+
+        console.log(stats);
+        
+        var url = "http://www.google.com/speech-api/v1/recognize?client=chromium&lang=en",
+            headers = { 'Content-type': 'audio/flac; rate=16000', "Accept":"audio/flac" };
+
+        restler.post(url, {
+            multipart: true,
+            headers: headers,
+            method: "post",
+            data: { 
+                "file": restler.file(audioFile, null, stats.size, null, "audio/flac")
+            }
+        }).on("complete", function(data) {
+            console.log(data);
+            return callback && callback();
+        });
+    
+    });
+
+    /*
+    var command = "rec temp/rec.mp3 rate 16k silence -l 1 0.1 1% 1 2.0 1%";
+    console.log("Speech to Text...", command);
+    child = exec(command, // command line argument directly in string
+        { cwd: rootDir },
+      function (error, stdout, stderr) {      // one easy function to capture data/errors
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) {
+          console.log('exec error: ' + error);
+        }
+        return callback && callback();
+    });
+    */
+}
+/**
+Helper function for converting audio mp3 to flax
+*/
+function convertAudio(sourceFile, destFile, callback) {
+    var command = "ffmpeg -i \""+sourceFile+"\" -ar 16000 -c:a flac \""+destFile+"\" -y ";
+    console.log("Converting...", command);
+    child = exec(command, // command line argument directly in string
+        { cwd: rootDir },
+      function (error, stdout, stderr) {      // one easy function to capture data/errors
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) {
+          console.log('exec error: ' + error);
+        }
+        return callback && callback();
+    });
+}
+/*
+console.log("Start");
+recordAudio("temp/rec.mp3", function() {
+    convertAudio("temp/rec.mp3", "temp/rec.flac", function() {
+        speechToText("temp/rec.flac", function() {
+            console.log("Done!");
+        });
+    });
+});
+*/
+speechToText("temp/rec.flac", function() {
+        console.log("Done!");
+});
+    
+
 // Array with some colors
 var colors = [ 'red', 'green', 'blue', 'magenta', 'purple', 'plum', 'orange' ];
 // ... in random order

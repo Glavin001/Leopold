@@ -7,7 +7,7 @@
 # Multiple results
 #URL="http://www.google.com/speech-api/v1/recognize?lang=en&client=chromium&maxresults=6"
 
-USER_DIR=$HOME/.palaver.d
+USER_DIR=$HOME/.leopold
 while read line           
 do           
     export "$line"           

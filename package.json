@@ -4,6 +4,7 @@
     "author": "Glavin Wiechert <glavin.wiechert@gmail.com>",
     "description": "Virtual Assistant.",
     "dependencies": {
-        "websocket":"*"
+        "websocket":"*",
+        "restler":"*"
     }
 }
