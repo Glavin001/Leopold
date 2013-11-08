@@ -3,6 +3,11 @@ Leopold
 
 Virtual Assistant for Ubuntu, Mac, Raspberry Pi, and more!
 
+## Features
+- Node.js & Python server 
+- JavaScript Client SDK (requires running the Node.js server)
+- Supports Mac and Linux (Ubuntu)
+
 -----
 
 #### Important: Leopold is no longer backwards compatible with [Palaver](https://github.com/JamezQ/Palaver).
@@ -33,6 +38,18 @@ git clone https://github.com/Glavin001/Leopold.git && cd Leopold && ./install
 -----
 
 ## Usage
+#### Node.js Server & JavaScript Websocket SDK
+Start Node.js Leopold server:
+```bash
+node server/server.js
+```
+Start test webpage with JavaScript API:
+```bash
+cd server && python -m SimpleHTTPServer
+```
+then open
+`http://localhost:8080/test.html`
+
 
 ### Mac
 Coming soon.
