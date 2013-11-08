@@ -1,11 +1,11 @@
 Leopold
 =========================
 
-Virtual Assistant for Ubuntu, Mac, Raspberry Pi, and more!
+Virtual Assistant for Ubuntu, Mac, Raspberry Pi, and more! Writing in Python and Node.js.
 
 ## Features
-- Node.js & Python server 
-- JavaScript Client SDK (requires running the Node.js server)
+- [Node.js](http://nodejs.org/) & [Python](http://www.python.org/) server 
+- [JavaScript Client SDK (requires running the Node.js server)](https://github.com/Glavin001/Leopold/issues/41)
 - Supports Mac and Linux (Ubuntu)
 
 -----
