@@ -3,10 +3,34 @@ Leopold
 
 Virtual Assistant for Ubuntu, Mac, Raspberry Pi, and more!
 
-## Installation
-In your bash Terminal run the command `./install` in the Leopold directory.
+-----
 
-### Important: Leopold is no longer backwards compatible with Palaver.
+#### Important: Leopold is no longer backwards compatible with [Palaver](https://github.com/JamezQ/Palaver).
+
+-----
+
+## Installation
+Run the following Terminal command.
+### 1) SSH
+```bash
+git clone git@github.com:Glavin001/Leopold.git && cd Leopold && ./install
+```
+#### Troubleshooting
+If you receive the following error:
+```bash
+Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+```
+Then use method 2, `HTTP`, instead.
+### 2) HTTP
+```bash
+git clone https://github.com/Glavin001/Leopold.git && cd Leopold && ./install
+```
+
+-----
 
 ## Usage
 
