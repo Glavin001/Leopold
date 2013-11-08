@@ -9,7 +9,7 @@ var fs = require("fs"),
     child;
 
 // Optional. You will see this name in eg. 'ps' or 'top' command
-process.title = 'node-chat';
+process.title = 'node-leopold';
  
 // Port where we'll run the websocket server
 var webSocketsServerPort = 1337;
@@ -41,91 +41,87 @@ function htmlEntities(str) {
 */
 function recordAudio(filePath, callback) { 
     var command = "rec \""+filePath+"\" rate 16k silence -l 1 0.1 1% 1 2.0 1%";
-    console.log("Recording...", command);
+    //console.log("Recording...", command);
     child = exec(command, // command line argument directly in string
         { cwd: rootDir },
       function (error, stdout, stderr) {      // one easy function to capture data/errors
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
+        //console.log('stdout: ' + stdout);
+        //console.log('stderr: ' + stderr);
         if (error !== null) {
           console.log('exec error: ' + error);
         }
-        return callback && callback();
+        return callback && callback(error, stdout, stderr);
     });
 }
+
 /**
  Helper function for Speech to Text
 */
 function speechToText(audioFile, callback) {
-    console.log("speechToText ", audioFile);
-
-    fs.stat(audioFile, function(err, stats) {
-
-        console.log(stats);
-        
-        var url = "http://www.google.com/speech-api/v1/recognize?client=chromium&lang=en",
-            headers = { 'Content-type': 'audio/flac; rate=16000', "Accept":"audio/flac" };
-
-        restler.post(url, {
-            multipart: true,
-            headers: headers,
-            method: "post",
-            data: { 
-                "file": restler.file(audioFile, null, stats.size, null, "audio/flac")
-            }
-        }).on("complete", function(data) {
-            console.log(data);
-            return callback && callback();
-        });
-    
-    });
-
-    /*
-    var command = "rec temp/rec.mp3 rate 16k silence -l 1 0.1 1% 1 2.0 1%";
-    console.log("Speech to Text...", command);
+    // audioFile = path.resolve(rootDir, audioFile);
+    //console.log("speechToText ", audioFile);
+    //wget -qO- --post-file "$1" --header 'Content-type: audio/x-flac; rate=16000' "$URL" > result.json
+    var url = "http://www.google.com/speech-api/v1/recognize?client=chromium&lang=en";
+    var headers = "Content-type: audio/x-flac; rate=16000";
+    var command = 'wget -qO- --post-file "'+audioFile+'" --header "'+headers+'" "'+url+'" ';
+    //console.log(command);
     child = exec(command, // command line argument directly in string
-        { cwd: rootDir },
-      function (error, stdout, stderr) {      // one easy function to capture data/errors
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
-        if (error !== null) {
-          console.log('exec error: ' + error);
-        }
-        return callback && callback();
+            { cwd: rootDir },
+        function (error, stdout, stderr) {      // one easy function to capture data/errors
+            //console.log('stdout: ' + stdout);
+            //console.log('stderr: ' + stderr);
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+            var results = [];
+            if (stdout && stdout.length > 1) {
+                results = JSON.parse(stdout);
+            }
+            return callback && callback(error, results, stderr);
     });
-    */
+
 }
+
 /**
 Helper function for converting audio mp3 to flax
 */
 function convertAudio(sourceFile, destFile, callback) {
     var command = "ffmpeg -i \""+sourceFile+"\" -ar 16000 -c:a flac \""+destFile+"\" -y ";
-    console.log("Converting...", command);
+    //console.log("Converting...", command);
     child = exec(command, // command line argument directly in string
         { cwd: rootDir },
       function (error, stdout, stderr) {      // one easy function to capture data/errors
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
+        //console.log('stdout: ' + stdout);
+        //console.log('stderr: ' + stderr);
         if (error !== null) {
-          console.log('exec error: ' + error);
+            console.log('exec error: ' + error);
         }
-        return callback && callback();
+        return callback && callback(error, stdout, stderr);
     });
 }
-/*
+
+
 console.log("Start");
-recordAudio("temp/rec.mp3", function() {
-    convertAudio("temp/rec.mp3", "temp/rec.flac", function() {
-        speechToText("temp/rec.flac", function() {
-            console.log("Done!");
+function listen() {
+    recordAudio("temp/rec.mp3", function() {
+        convertAudio("temp/rec.mp3", "temp/rec.flac", function() {
+            speechToText("temp/rec.flac", function(error, stdout, stderror) {
+                console.log(stdout);
+                if (!error && stdout) {
+                    broadcast("speechRecognized", stdout["hypotheses"]);
+                }
+                listen();
+            });
         });
     });
-});
-*/
+}
+listen();
+
+/*
 speechToText("temp/rec.flac", function() {
         console.log("Done!");
 });
-    
+*/  
 
 // Array with some colors
 var colors = [ 'red', 'green', 'blue', 'magenta', 'purple', 'plum', 'orange' ];
@@ -150,7 +146,6 @@ var wsServer = new webSocketServer({
     // an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
     httpServer: server
 });
- 
 // This callback function is called every time someone
 // tries to connect to the WebSocket server
 wsServer.on('request', function(request) {
@@ -199,10 +194,12 @@ wsServer.on('request', function(request) {
                 history = history.slice(-100);
  
                 // broadcast message to all connected clients
-                var json = JSON.stringify({ type:'message', data: obj });
-                for (var i=0; i < clients.length; i++) {
-                    clients[i].sendUTF(json);
-                }
+                broadcast('message', obj);
+                //var json = JSON.stringify({ type:'message', data: obj });
+                //for (var i=0, len=clients.length; i < len; i++) {
+                //    clients[i].sendUTF(json);
+                //}
+
             }
         }
     });
@@ -221,31 +218,12 @@ wsServer.on('request', function(request) {
  
 });
 
+// Broadcast to all connected clients
+function broadcast(type, data) {
+    console.log("Broadcast("+type+"):"+data);
+    for (var i=0, len=clients.length; i<len; i++) {
+        var json = JSON.stringify({type: type, data: data});
+        clients[i].sendUTF(json);
+    }
+}
 
-/*
-fs.watch("../temp/result", function( event, targetFile ) {
-    console.log("File ", event);
-    // on file change we can read the new xml
-    fs.readFile( '../temp/result','utf8', function ( err, data ) {
-        //
-        if ( err ) throw err;
-        console.dir(data);
-        console.log('Done');
-        // broadcast message to all connected clients
-        // we want to keep history of all sent messages
-        var obj = {
-            time: (new Date()).getTime(),
-            text: data,
-            author: "Server",
-            color: "red"
-        };
-        history.push(obj);
-        history = history.slice(-100);
-
-        var json = JSON.stringify({ type:'message', data: obj });
-        for (var i=0; i < clients.length; i++) {
-            clients[i].sendUTF(json);
-        }
-    });
-});
-*/

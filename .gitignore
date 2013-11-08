@@ -4,6 +4,7 @@ MODE
 tmp.sp
 InstallResult
 temp/*
+microphone/result
 
 # Logs
 log.txt
